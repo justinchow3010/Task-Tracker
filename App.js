@@ -16,6 +16,12 @@ export default App = () => {
       .then(R => { setRealm(R); reloadData(R); })
       .catch();
     var lis = watch(reloadData);
+    return () => {
+      setToDoList([]);
+      setRealm({});
+      setUpDateVisible(false);
+      setItemToUpdate(0);
+    }
   }, []);
 
   const reloadData = (realm) => {
@@ -30,8 +36,10 @@ export default App = () => {
     <View>
       <Header realm={realm} />
       {/* <Button title="Delete" onPress={() => deleteAllTodoList(realm)} /> */}
-      <Dialog.Container visible={upDateVisible}>
-        <Dialog.Title>Update Status</Dialog.Title>
+      <Dialog.Container visible={upDateVisible} onBackdropPress={() => setUpDateVisible(false)}>
+        <Dialog.Title>
+          Update Status
+        </Dialog.Title>
         <Dialog.Description>
           How is your task?
         </Dialog.Description>
@@ -44,16 +52,26 @@ export default App = () => {
         <TouchableOpacity style={styles.statusBtn} onPress={() => { updateTaskStatus(realm, "Completed", itemToUpdate); setUpDateVisible(false); }}>
           <Text>Completed</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.closeBtn} onPress={() => { setUpDateVisible(false); }}>
+          <Text style={{ color: "white" }}>Cancel</Text>
+        </TouchableOpacity>
       </Dialog.Container>
 
       <SwipeListView
         data={todoList}
-        renderItem={(data, rowMap) => (
-          <View style={styles.rowFront}>
-            <Text key={data._id} style={styles.title}>{data.item.name}</Text>
-            <Text style={styles.status}>Status: {data.item.status}</Text>
-          </View>
-        )}
+        renderItem={(data, rowMap) => {
+          if (data.item.status === "Completed") {
+            return <View style={styles.rowFrontCompleted}>
+              <Text key={data.item._id} style={styles.title}>{data.item.name}</Text>
+              <Text style={styles.status}>Status: {data.item.status}</Text>
+            </View>
+          } else {
+            return <View style={styles.rowFront}>
+              <Text key={data.item._id} style={styles.title}>{data.item.name}</Text>
+              <Text style={styles.status}>Status: {data.item.status}</Text>
+            </View>
+          }
+        }}
         renderHiddenItem={(data, rowMap) => (
           <View style={styles.rowBack}>
             <TouchableOpacity style={[styles.backBtn, styles.backLeftBtn]} onPress={() => {
@@ -116,10 +134,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
     padding: 20
-
+  },
+  rowFrontCompleted: {
+    backgroundColor: '#b3a89b',
+    borderRadius: 5,
+    height: 60,
+    margin: 5,
+    marginBottom: 15,
+    shadowColor: '#2F4F4F',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    padding: 20
   },
   rowBack: {
-    alignItems: 'center',
+    //alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 5,
@@ -135,6 +168,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#5bc0de",
     marginBottom: 10
+  },
+  closeBtn: {
+    backgroundColor: "#d9534f",
+    padding: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    borderRadius: 5,
   }
 })
 
