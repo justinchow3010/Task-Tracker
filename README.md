@@ -8,6 +8,7 @@
 <img src="https://github.com/justinchow3010/Task-Tracker/blob/main/Screenshot_1624614585.png" width="400" />
 
 ### Task status can be updated or the task can be deleted according to your working progress.  
+### The changes will be saved in the DB which can be shown in the "Status:" part. 
 <img src="https://github.com/justinchow3010/Task-Tracker/blob/main/Screenshot_1624614578.png" width="400" />
 <img src="https://github.com/justinchow3010/Task-Tracker/blob/main/Screenshot_1624614591.png" width="400" />
 <img src="https://github.com/justinchow3010/Task-Tracker/blob/main/Screenshot_1624614581.png" width="400" />
